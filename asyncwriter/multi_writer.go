@@ -10,7 +10,7 @@ import (
 // Writing on every writer is attempted, regardless of any errors returned from
 // any of the writers.
 // The n returned is the sum of number of bytes for all the writes performed.
-// As soon as one of the writers returns an error, AsyncMultiWriter returns the error.
+// When at least one of the writers returns an error, AsyncMultiWriter returns the error.
 // The error returned is not necessarily from the first writer that would result in error.
 func AsyncMultiWriter(writers ...io.Writer) io.Writer {
 	return &asyncMultiWriter{
@@ -38,8 +38,6 @@ func (aw *asyncMultiWriter) Write(p []byte) (int, error) {
 		}(w, nchan, errchan)
 	}
 
-	wg.Wait()
-
 	var total int
 	var err error
 	for i := 0; i < 2*len(aw.writers); i++ {
@@ -52,6 +50,8 @@ func (aw *asyncMultiWriter) Write(p []byte) (int, error) {
 			}
 		}
 	}
+
+	wg.Wait()
 
 	return total, err
 }
