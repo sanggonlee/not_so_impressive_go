@@ -10,9 +10,8 @@ import (
 // Writing on every writer is attempted, regardless of any errors returned from
 // any of the writers.
 // The n returned is the sum of number of bytes for all the writes performed.
-// The err returned includes all the error messages from any writers which returned
-// error and formats them by delimiting with commas.
-// The err could also result from attempting to write on a closed AsyncMultiWriter.
+// As soon as one of the writers returns an error, AsyncMultiWriter returns the error.
+// The error returned is not necessarily from the first writer that would result in error.
 func AsyncMultiWriter(writers ...io.Writer) io.Writer {
 	return &asyncMultiWriter{
 		writers: writers,
