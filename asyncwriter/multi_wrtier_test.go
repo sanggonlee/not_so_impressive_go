@@ -12,17 +12,28 @@ import (
 
 const tempDir = "tmp"
 
+var (
+	f1, f2, f3, f4, f5, f6, f7, f8, f9, f10 *os.File
+)
+
 func TestMain(m *testing.M) {
 	cleanup := setupTempDir()
+	f1, _ = os.Create(filepath.Join(tempDir, filepath.Base("1.txt")))
+	f2, _ = os.Create(filepath.Join(tempDir, filepath.Base("2.txt")))
+	f3, _ = os.Create(filepath.Join(tempDir, filepath.Base("3.txt")))
+	f4, _ = os.Create(filepath.Join(tempDir, filepath.Base("4.txt")))
+	f5, _ = os.Create(filepath.Join(tempDir, filepath.Base("5.txt")))
+	f6, _ = os.Create(filepath.Join(tempDir, filepath.Base("6.txt")))
+	f7, _ = os.Create(filepath.Join(tempDir, filepath.Base("7.txt")))
+	f8, _ = os.Create(filepath.Join(tempDir, filepath.Base("8.txt")))
+	f9, _ = os.Create(filepath.Join(tempDir, filepath.Base("9.txt")))
+	f10, _ = os.Create(filepath.Join(tempDir, filepath.Base("10.txt")))
 	exitCode := m.Run()
 	cleanup()
 	os.Exit(exitCode)
 }
 
 func BenchmarkAsyncMultiWriter_Write_3_writers(b *testing.B) {
-	f1, _ := os.Create(filepath.Join(tempDir, filepath.Base("1.txt")))
-	f2, _ := os.Create(filepath.Join(tempDir, filepath.Base("2.txt")))
-	f3, _ := os.Create(filepath.Join(tempDir, filepath.Base("3.txt")))
 	writer := asyncwriter.AsyncMultiWriter(
 		f1, f2, f3,
 	)
@@ -35,9 +46,6 @@ func BenchmarkAsyncMultiWriter_Write_3_writers(b *testing.B) {
 }
 
 func BenchmarkMultiWriter_Write_3_writers(b *testing.B) {
-	f1, _ := os.Create(filepath.Join(tempDir, filepath.Base("1.txt")))
-	f2, _ := os.Create(filepath.Join(tempDir, filepath.Base("2.txt")))
-	f3, _ := os.Create(filepath.Join(tempDir, filepath.Base("3.txt")))
 	writer := io.MultiWriter(
 		f1, f2, f3,
 	)
@@ -50,15 +58,6 @@ func BenchmarkMultiWriter_Write_3_writers(b *testing.B) {
 }
 
 func BenchmarkAsyncMultiWriter_Write_18_writers(b *testing.B) {
-	f1, _ := os.Create(filepath.Join(tempDir, filepath.Base("1.txt")))
-	f2, _ := os.Create(filepath.Join(tempDir, filepath.Base("2.txt")))
-	f3, _ := os.Create(filepath.Join(tempDir, filepath.Base("3.txt")))
-	f4, _ := os.Create(filepath.Join(tempDir, filepath.Base("4.txt")))
-	f5, _ := os.Create(filepath.Join(tempDir, filepath.Base("5.txt")))
-	f6, _ := os.Create(filepath.Join(tempDir, filepath.Base("6.txt")))
-	f7, _ := os.Create(filepath.Join(tempDir, filepath.Base("7.txt")))
-	f8, _ := os.Create(filepath.Join(tempDir, filepath.Base("8.txt")))
-	f9, _ := os.Create(filepath.Join(tempDir, filepath.Base("9.txt")))
 	writer := asyncwriter.AsyncMultiWriter(
 		f1, f2, f3, f4, f5, f6, f7, f8, f9,
 		f1, f2, f3, f4, f5, f6, f7, f8, f9,
@@ -72,15 +71,6 @@ func BenchmarkAsyncMultiWriter_Write_18_writers(b *testing.B) {
 }
 
 func BenchmarkMultiWriter_Write_18_writers(b *testing.B) {
-	f1, _ := os.Create(filepath.Join(tempDir, filepath.Base("1.txt")))
-	f2, _ := os.Create(filepath.Join(tempDir, filepath.Base("2.txt")))
-	f3, _ := os.Create(filepath.Join(tempDir, filepath.Base("3.txt")))
-	f4, _ := os.Create(filepath.Join(tempDir, filepath.Base("4.txt")))
-	f5, _ := os.Create(filepath.Join(tempDir, filepath.Base("5.txt")))
-	f6, _ := os.Create(filepath.Join(tempDir, filepath.Base("6.txt")))
-	f7, _ := os.Create(filepath.Join(tempDir, filepath.Base("7.txt")))
-	f8, _ := os.Create(filepath.Join(tempDir, filepath.Base("8.txt")))
-	f9, _ := os.Create(filepath.Join(tempDir, filepath.Base("9.txt")))
 	writer := io.MultiWriter(
 		f1, f2, f3, f4, f5, f6, f7, f8, f9,
 		f1, f2, f3, f4, f5, f6, f7, f8, f9,
@@ -94,16 +84,6 @@ func BenchmarkMultiWriter_Write_18_writers(b *testing.B) {
 }
 
 func BenchmarkAsyncMultiWriter_Write_20_writers(b *testing.B) {
-	f1, _ := os.Create(filepath.Join(tempDir, filepath.Base("1.txt")))
-	f2, _ := os.Create(filepath.Join(tempDir, filepath.Base("2.txt")))
-	f3, _ := os.Create(filepath.Join(tempDir, filepath.Base("3.txt")))
-	f4, _ := os.Create(filepath.Join(tempDir, filepath.Base("4.txt")))
-	f5, _ := os.Create(filepath.Join(tempDir, filepath.Base("5.txt")))
-	f6, _ := os.Create(filepath.Join(tempDir, filepath.Base("6.txt")))
-	f7, _ := os.Create(filepath.Join(tempDir, filepath.Base("7.txt")))
-	f8, _ := os.Create(filepath.Join(tempDir, filepath.Base("8.txt")))
-	f9, _ := os.Create(filepath.Join(tempDir, filepath.Base("9.txt")))
-	f10, _ := os.Create(filepath.Join(tempDir, filepath.Base("10.txt")))
 	writer := asyncwriter.AsyncMultiWriter(
 		f1, f2, f3, f4, f5, f6, f7, f8, f9, f10,
 		f1, f2, f3, f4, f5, f6, f7, f8, f9, f10,
@@ -117,16 +97,6 @@ func BenchmarkAsyncMultiWriter_Write_20_writers(b *testing.B) {
 }
 
 func BenchmarkMultiWriter_Write_20_writers(b *testing.B) {
-	f1, _ := os.Create(filepath.Join(tempDir, filepath.Base("1.txt")))
-	f2, _ := os.Create(filepath.Join(tempDir, filepath.Base("2.txt")))
-	f3, _ := os.Create(filepath.Join(tempDir, filepath.Base("3.txt")))
-	f4, _ := os.Create(filepath.Join(tempDir, filepath.Base("4.txt")))
-	f5, _ := os.Create(filepath.Join(tempDir, filepath.Base("5.txt")))
-	f6, _ := os.Create(filepath.Join(tempDir, filepath.Base("6.txt")))
-	f7, _ := os.Create(filepath.Join(tempDir, filepath.Base("7.txt")))
-	f8, _ := os.Create(filepath.Join(tempDir, filepath.Base("8.txt")))
-	f9, _ := os.Create(filepath.Join(tempDir, filepath.Base("9.txt")))
-	f10, _ := os.Create(filepath.Join(tempDir, filepath.Base("10.txt")))
 	writer := io.MultiWriter(
 		f1, f2, f3, f4, f5, f6, f7, f8, f9, f10,
 		f1, f2, f3, f4, f5, f6, f7, f8, f9, f10,
@@ -168,6 +138,72 @@ asdfasdfdsafsdafsdfasdfdsfdsafsda
 asdfasdfdsafsdafsdfasdfdsfdsafsda
 asdfasdfdsafsdafsdfasdfdsfdsafsda
 asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsda
+asdfasdfdsafsdafsdfasdfdsfdsafsdaasdfasdfdsafsdafsdfasdfdsfdsafsda
 asdfasdfdsafsdafsdfasdfdsfdsafsda
 asdfasdfdsafsdafsdfasdfdsfdsafsda
 asdfasdfdsafsdafsdfasdfdsfdsafsda
