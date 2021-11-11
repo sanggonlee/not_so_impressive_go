@@ -23,35 +23,34 @@ type asyncMultiWriter struct {
 }
 
 func (aw *asyncMultiWriter) Write(p []byte) (int, error) {
-	nchan := make(chan int, len(aw.writers))
-	errchan := make(chan error, len(aw.writers))
-
 	var wg sync.WaitGroup
 	wg.Add(len(aw.writers))
 
-	for _, w := range aw.writers {
-		go func(w io.Writer, nchan chan<- int, errchan chan<- error) {
-			n, err := w.Write(p)
-			go func() { nchan <- n }()
-			go func() { errchan <- err }()
+	type nAndErrType struct {
+		n   int
+		err error
+	}
+
+	nAndErrs := make([]nAndErrType, len(aw.writers))
+
+	for i, w := range aw.writers {
+		go func(i int, w io.Writer) {
+			nAndErrs[i].n, nAndErrs[i].err = w.Write(p)
 			wg.Done()
-		}(w, nchan, errchan)
+		}(i, w)
 	}
 
 	var total int
 	var err error
-	for i := 0; i < 2*len(aw.writers); i++ {
-		select {
-		case n := <-nchan:
-			total += n
-		case writeErr := <-errchan:
-			if writeErr != nil {
-				err = writeErr
-			}
-		}
-	}
 
 	wg.Wait()
+
+	for _, elt := range nAndErrs {
+		total += elt.n
+		if elt.err != nil {
+			err = elt.err
+		}
+	}
 
 	return total, err
 }

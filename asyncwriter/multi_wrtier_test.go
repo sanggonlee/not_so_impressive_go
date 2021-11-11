@@ -57,10 +57,9 @@ func BenchmarkMultiWriter_Write_3_writers(b *testing.B) {
 	}
 }
 
-func BenchmarkAsyncMultiWriter_Write_18_writers(b *testing.B) {
+func BenchmarkAsyncMultiWriter_Write_8_writers(b *testing.B) {
 	writer := asyncwriter.AsyncMultiWriter(
-		f1, f2, f3, f4, f5, f6, f7, f8, f9,
-		f1, f2, f3, f4, f5, f6, f7, f8, f9,
+		f1, f2, f3, f4, f5, f6, f7, f8,
 	)
 	for i := 0; i < b.N; i++ {
 		_, err := writer.Write(testInputBytes)
@@ -70,10 +69,9 @@ func BenchmarkAsyncMultiWriter_Write_18_writers(b *testing.B) {
 	}
 }
 
-func BenchmarkMultiWriter_Write_18_writers(b *testing.B) {
+func BenchmarkMultiWriter_Write_8_writers(b *testing.B) {
 	writer := io.MultiWriter(
-		f1, f2, f3, f4, f5, f6, f7, f8, f9,
-		f1, f2, f3, f4, f5, f6, f7, f8, f9,
+		f1, f2, f3, f4, f5, f6, f7, f8,
 	)
 	for i := 0; i < b.N; i++ {
 		_, err := writer.Write(testInputBytes)
